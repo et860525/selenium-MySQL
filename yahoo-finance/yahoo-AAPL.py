@@ -3,7 +3,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
-import pandas as pd
+from db_config import config
+
+
 import time
 
 driver = webdriver.Chrome("E:\Mango\Documents\Code\Python\chromedriver\chromedriver.exe")
