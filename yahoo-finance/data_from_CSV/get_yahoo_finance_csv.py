@@ -38,37 +38,13 @@ try:
             break
     time.sleep(2)
 
-    ## Roll page
-    # method 1
-    #target = driver.find_element_by_css_selector('table tfoot')
-    #actions = ActionChains(driver)
-    #actions.move_to_element(target)
-    #actions.perform()
-
-    # method 2
-    body = driver.find_element_by_css_selector('body')
-    i = 0
-    while i < 5:
-        i += 1
-        body.send_keys(Keys.END)
-        time.sleep(0.5)
-
-    # Get historical-prices table
-    table = driver.find_element(By.XPATH, "//table[@data-test='historical-prices']")
+    # click download button to download csv
     
-    # Get title
-    columns = [th.text.replace('*', '') for th in table.find_element_by_css_selector('tr').find_elements_by_css_selector('th')]
- 
-    # Get data trs without first(columns) and last(tfoot)
-    trs = table.find_elements_by_css_selector('tr')[1:-1]
-    
-    # Get data
-    rows = list()
-    for tr in trs:
-        # Get td.text and avoid get "Dividend" data
-        row = [td.text for td in tr.find_elements_by_css_selector('td')]
-        if not any("Dividend" in s for s in row):
-            rows.append(row)
+    items = driver.find_elements_by_css_selector('a span')
+    for item in items:
+        if item.text == "Download":
+            item.click()
+            break
 
     time.sleep(1)
     
