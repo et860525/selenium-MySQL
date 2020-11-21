@@ -20,7 +20,7 @@ def insert_aapl():
         cursor = conn.cursor()
         for row in df.itertuples(index=False):
             cursor.execute('''INSERT INTO aapl(date, open, high, low, close, adj_close, volume) 
-                VALUES('{}',{},{},{},{},{},{})'''.format(row[0],row[1],row[2],row[3],row[4],row[5],row[6]) )
+                VALUES('{}',{},{},{},{},{},{})'''.format(row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
 
         conn.commit()
         print('Success')

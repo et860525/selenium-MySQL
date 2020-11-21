@@ -8,8 +8,7 @@ from pathlib import Path
 p = Path.cwd().parent
 sys.path.append(str(p))
 
-from connection.db_config import config
-
+import connect_db
 
 import time
 
@@ -68,9 +67,15 @@ try:
         # Get td.text and avoid get "Dividend" data
         row = [td.text for td in tr.find_elements_by_css_selector('td')]
         if not any("Dividend" in s for s in row):
-            rows.append(row)
+            if not any(s for s in row if "Stock" in s):
+                rows.append(row)
 
-    time.sleep(1)
+    #for row in rows:
+    #    print(row)
+
+    connect_db.send_Data2Mysql(rows)
+
+    time.sleep(2)
     
     driver.quit()
 except:

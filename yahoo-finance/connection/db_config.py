@@ -1,5 +1,19 @@
 from configparser import ConfigParser
 
+# Initialize
+def init():
+    pass
+
+# Add key
+def add_key(key, value, section='mysql'):
+    cfg = ConfigParser()
+    cfg.read('database.ini')
+
+    cfg['mysql'][key] = value
+    with open('database.ini', 'w') as configfile:
+        cfg.write(configfile)
+
+# Use
 def config(filename='database.ini', section='mysql'):
     
     # Create parser
