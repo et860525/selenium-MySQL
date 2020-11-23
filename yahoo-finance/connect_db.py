@@ -26,6 +26,7 @@ def isDBInstall():
 def create_database():
     try:
         params = db_config.config()
+        
         conn = pymysql.connect(**params)
         cursor = conn.cursor()
 
@@ -83,14 +84,22 @@ def insert_data(datas, table_name='aapl'):
         conn = pymysql.connect(**params)
         cursor = conn.cursor()
 
+        # Get table
         cursor.execute(f"SHOW TABLES LIKE '{table_name}'")
         table = cursor.fetchone()
 
         if table[0] == table_name:
+            print('Insert data in database.')
             for row in datas:
-                print(row)
-                row[6] = row[6].replace(',', '')
-                cursor.execute('''INSERT INTO aapl(date, open, high, low, close, adj_close, volume) VALUES('{}',{},{},{},{},{},{})'''.format(row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
+                #print(row)
+                cursor.execute(f'''SELECT date FROM {table_name} WHERE date = \'{row[0]}\'''')
+                re_data = cursor.fetchone()
+                
+                if re_data == None:
+                    row[6] = row[6].replace(',', '')
+                    cursor.execute('''INSERT INTO aapl(date, open, high, low, close, adj_close, volume) VALUES('{}',{},{},{},{},{},{})'''.format(row[0],row[1],row[2],row[3],row[4],row[5],row[6]))                
+                else:
+                    print('Data exist!!')
             conn.commit()
         else:
             print(f"'{table_name}' is not exist.")    
@@ -100,9 +109,10 @@ def insert_data(datas, table_name='aapl'):
 
 
 def send_Data2Mysql(datas, stock_name='aapl'):
+    db_config.init()
     if isDBInstall():
         create_database()
         create_table()
         insert_data(datas)
     else:
-        print("It is been created")
+        print("MySQL is been install")

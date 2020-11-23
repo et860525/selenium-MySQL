@@ -19,3 +19,8 @@ Get stock data and save into your MySQL from yahoo finance.
 ## How to use
 
 Use get **get_yahoo_finance_data.py** file
+
+## Important Things
+
+* If you drop 'stocks' database in your MySQL, you might delete 'database.ini' file and reuse **get_yahoo_finance_data.py**.
+
