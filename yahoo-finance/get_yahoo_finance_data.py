@@ -64,8 +64,9 @@ try:
     # Get data
     rows = list()
     for tr in trs:
-        # Get td.text and avoid get "Dividend" data
+        # Get td.text
         row = [td.text for td in tr.find_elements_by_css_selector('td')]
+        # avoid get some strings in the data
         if not any("Dividend" in s for s in row):
             if not any(s for s in row if "Stock" in s):
                 rows.append(row)

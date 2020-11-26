@@ -2,7 +2,6 @@ from datetime import datetime
 import matplotlib
 from matplotlib import pyplot as plt
 import numpy as np
-
 import pandas as pd
 
 import read_db
@@ -10,11 +9,10 @@ import read_db
 date = []
 close = []
 
-#data = read_db.get_data()
-data = pd.read_csv('AAPL.csv')
 #df = pd.DataFrame(data=data, columns=['date','open','high','low','close','adj_close','volume'])
 
-def data_from_csv():
+def data_from_csv(filename):
+    data = pd.read_csv('AAPL.csv') # filename
     try:
         for row in data['Date']:
             # matplotlib.dates.date2num(): Convert datetime objects to Matplotlib dates.
@@ -35,13 +33,32 @@ def data_from_csv():
         pass
 
 
-def data_from_db():
+def data_from_db(stock_name):
+    from connection import db_config
+    import pymysql
+
+    # Declear data first ?
+
+    try:
+        params = db_config.config()
+        conn = pymysql.connect(**params)
+        cursor = conn.cursor()
+
+        cursor.execute(f"SELECT date, close FROM {stock_name}")
+
+        data = cursor.fetchall()
+
+    except pymysql.DatabaseError as err:
+        print("Something went wrong: {}".format(err))
+    finally:
+        conn.close()
+
     try:
         for row in data:
             # matplotlib.dates.date2num(): Convert datetime objects to Matplotlib dates.
             # datetime.strptime(row[0], "%Y-%m-%d"): Translate string to datetime object.
             date.append(matplotlib.dates.date2num(datetime.strptime(row[0], "%Y-%m-%d")))
-            close.append(row[4])
+            close.append(row[1])
 
         ax = plt.gca() # Get axes and draw (獲得軸線可進行繪畫)
         
@@ -54,9 +71,5 @@ def data_from_db():
 
         plt.plot(date, close, linewidth=1)
         plt.show()   
-
     except:
         pass
-
-if __name__ == "__main__":
-    data_from_csv()

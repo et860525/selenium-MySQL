@@ -3,10 +3,12 @@ from connection import db_config
 import pymysql
 
 '''
-Check MySQL is install and database is exsits or not in the first time.
+Save data from yahoo finance into the MySQL
+
 '''
 
 # NOT FINISH
+# Check MySQL is install and database is exsits or not in the first time.
 def isDBInstall():
     try:
         params = db_config.config()
@@ -69,7 +71,7 @@ def create_table(table_name='aapl'):
                 adj_close FLOAT(5) NOT NULL, 
                 volume INT NOT NULL)'''.format(table_name)
             )
-            print('{} is been create.'.format(table_name))            
+            print(f'{table_name} is been create.')            
         else:
             pass
         conn.close()
@@ -115,4 +117,4 @@ def send_Data2Mysql(datas, stock_name='aapl'):
         create_table()
         insert_data(datas)
     else:
-        print("MySQL is been install")
+        print("MySQL is not been install")
